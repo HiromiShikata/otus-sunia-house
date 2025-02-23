@@ -1,0 +1,37 @@
+on:
+  push:
+    paths:
+      - 'extracting-spreadsheet/**'
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  extracting-spreadsheet:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    defaults:
+      run:
+        working-directory: ./extracting-spreadsheet
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: ./extracting-spreadsheet/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - run: npm run fmt && git --no-pager diff
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: 'autogen(extracting-spreadsheet): re-format / npm run fmt'
+      - if: github.ref == 'refs/heads/main'
+        run: |
+          echo '${{ secrets.CLASPRC_JSON }}' > ~/.clasprc.json
+          npx clasp push -f
