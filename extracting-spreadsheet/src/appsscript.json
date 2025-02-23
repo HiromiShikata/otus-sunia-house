@@ -1,7 +1,6 @@
 {
   "timeZone": "UTC",
-  "dependencies": {
-  },
+  "dependencies": {},
   "exceptionLogging": "STACKDRIVER",
   "runtimeVersion": "V8"
 }
