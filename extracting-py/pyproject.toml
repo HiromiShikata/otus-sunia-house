@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "extracting-py"
+version = "0.1.0"
+description = ""
+authors = ["HiromiShikata <shikata.hiromi@gmail.com>"]
+readme = "README.md"
+packages = [{include = "extracting_py"}]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<4.0"
+browser-use = "^0.1.37"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
